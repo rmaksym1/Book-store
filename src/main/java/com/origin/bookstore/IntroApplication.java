@@ -27,7 +27,9 @@ public class IntroApplication {
             book.setDescription("This is a test book");
             book.setPrice(BigDecimal.valueOf(14.99));
             book.setIsbn("987-654-321-0123");
+
             bookService.save(book);
+            bookService.findAll().forEach(System.out::println);
         };
     }
 }

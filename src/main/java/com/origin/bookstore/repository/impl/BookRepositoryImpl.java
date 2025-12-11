@@ -1,5 +1,6 @@
 package com.origin.bookstore.repository.impl;
 
+import com.origin.bookstore.exception.DataProcessingException;
 import com.origin.bookstore.model.Book;
 import com.origin.bookstore.repository.BookRepository;
 import java.util.List;
@@ -29,7 +30,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't save book to the DB! ", e);
+            throw new DataProcessingException("Can't save book to the DB! ", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -41,6 +42,10 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        return sessionFactory.openSession().createQuery("from Book", Book.class).list();
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Book", Book.class).list();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't find any books", e);
+        }
     }
 }
