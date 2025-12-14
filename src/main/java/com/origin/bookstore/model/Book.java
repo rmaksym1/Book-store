@@ -6,12 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.math.BigDecimal;
-import lombok.Getter;
+import jakarta.persistence.Table;
 import lombok.Setter;
 
 @Entity
-@Getter
 @Setter
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
