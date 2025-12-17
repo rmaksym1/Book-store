@@ -4,6 +4,7 @@ import com.origin.bookstore.exception.DataProcessingException;
 import com.origin.bookstore.model.Book;
 import com.origin.bookstore.repository.BookRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -46,6 +47,15 @@ public class BookRepositoryImpl implements BookRepository {
             return session.createQuery("from Book", Book.class).list();
         } catch (Exception e) {
             throw new DataProcessingException("Can't find any books", e);
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.get(Book.class, id));
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get book by id: " + id, e);
         }
     }
 }
