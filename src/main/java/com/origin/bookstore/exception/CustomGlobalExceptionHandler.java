@@ -31,4 +31,3 @@ public class CustomGlobalExceptionHandler {
         return new ResponseEntity<>("Entity not found exception occured",
                 HttpStatus.NOT_FOUND);
     }
-}
