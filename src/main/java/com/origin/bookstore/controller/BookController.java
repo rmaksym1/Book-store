@@ -1,8 +1,10 @@
 package com.origin.bookstore.controller;
 
 import com.origin.bookstore.dto.BookDto;
+import com.origin.bookstore.dto.BookSearchParameters;
 import com.origin.bookstore.dto.CreateBookRequestDto;
 import com.origin.bookstore.service.BookService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,7 +35,7 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto bookDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
@@ -44,7 +46,12 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookDto updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+    public BookDto updateBook(@PathVariable Long id, @RequestBody @Valid BookDto bookDto) {
         return bookService.updateBook(id, bookDto);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(BookSearchParameters searchParameters) {
+        return bookService.search(searchParameters);
     }
 }
