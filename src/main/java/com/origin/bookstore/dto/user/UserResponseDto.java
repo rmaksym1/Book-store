@@ -1,4 +1,4 @@
-package com.origin.bookstore.dto.User;
+package com.origin.bookstore.dto.user;
 
 import lombok.Getter;
 import lombok.Setter;

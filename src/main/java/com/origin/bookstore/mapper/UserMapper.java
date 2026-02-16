@@ -1,8 +1,8 @@
 package com.origin.bookstore.mapper;
 
 import com.origin.bookstore.config.MapperConfig;
-import com.origin.bookstore.dto.User.UserResponseDto;
-import com.origin.bookstore.dto.User.UserRegistrationRequestDto;
+import com.origin.bookstore.dto.user.UserRegistrationRequestDto;
+import com.origin.bookstore.dto.user.UserResponseDto;
 import com.origin.bookstore.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

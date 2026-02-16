@@ -1,8 +1,8 @@
 package com.origin.bookstore.controller;
 
-import com.origin.bookstore.dto.Book.BookDto;
-import com.origin.bookstore.dto.Book.BookSearchParameters;
-import com.origin.bookstore.dto.Book.CreateBookRequestDto;
+import com.origin.bookstore.dto.book.BookDto;
+import com.origin.bookstore.dto.book.BookSearchParameters;
+import com.origin.bookstore.dto.book.CreateBookRequestDto;
 import com.origin.bookstore.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -5,8 +5,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
-    String field;
-    String fieldToMatch;
+    private String field;
+    private String fieldToMatch;
 
     @Override
     public void initialize(FieldMatch constraintAnnotation) {

@@ -1,4 +1,4 @@
-package com.origin.bookstore.dto.User;
+package com.origin.bookstore.dto.user;
 
 import com.origin.bookstore.validation.FieldMatch;
 import jakarta.validation.constraints.NotBlank;

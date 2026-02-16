@@ -1,7 +1,7 @@
 package com.origin.bookstore.service.impl;
 
-import com.origin.bookstore.dto.User.UserRegistrationRequestDto;
-import com.origin.bookstore.dto.User.UserResponseDto;
+import com.origin.bookstore.dto.user.UserRegistrationRequestDto;
+import com.origin.bookstore.dto.user.UserResponseDto;
 import com.origin.bookstore.mapper.UserMapper;
 import com.origin.bookstore.model.User;
 import com.origin.bookstore.repository.user.UserRepository;

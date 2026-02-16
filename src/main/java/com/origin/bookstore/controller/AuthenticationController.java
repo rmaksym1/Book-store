@@ -1,7 +1,7 @@
 package com.origin.bookstore.controller;
 
-import com.origin.bookstore.dto.User.UserRegistrationRequestDto;
-import com.origin.bookstore.dto.User.UserResponseDto;
+import com.origin.bookstore.dto.user.UserRegistrationRequestDto;
+import com.origin.bookstore.dto.user.UserResponseDto;
 import com.origin.bookstore.exception.RegistrationException;
 import com.origin.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,8 @@ public class AuthenticationController {
 
     @PostMapping("/registration")
     @Operation(summary = "Create new user", description = "Create a new user")
-    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request) throws RegistrationException {
-       return userService.save(request);
+    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
+            throws RegistrationException {
+        return userService.save(request);
     }
 }
