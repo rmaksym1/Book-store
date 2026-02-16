@@ -1,6 +1,6 @@
 package com.origin.bookstore.repository.book;
 
-import com.origin.bookstore.dto.BookSearchParameters;
+import com.origin.bookstore.dto.Book.BookSearchParameters;
 import com.origin.bookstore.model.Book;
 import com.origin.bookstore.repository.SpecificationBuilder;
 import com.origin.bookstore.repository.book.specificationproviders.AuthorSpecificationProvider;
