@@ -17,8 +17,6 @@ public class CustomGlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error
                 -> errors.put(error.getField(), error.getDefaultMessage()));
-        ex.getBindingResult().getGlobalErrors().forEach(error
-                -> errors.put(error.getObjectName(), error.getDefaultMessage()));
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
@@ -32,5 +30,10 @@ public class CustomGlobalExceptionHandler {
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
         return new ResponseEntity<>("Entity not found exception occured",
                 HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<String> handleRegistrationException(RegistrationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

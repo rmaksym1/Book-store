@@ -15,5 +15,6 @@ public interface UserMapper {
     public User toModel(UserRegistrationRequestDto userRegistrationRequestDto);
 
     @Mapping(target = "id", ignore = true)
-    void updateUser(UserResponseDto userDto, @MappingTarget User user);
+    void updateUser(UserRegistrationRequestDto userRegistrationRequestDto,
+                    @MappingTarget User user);
 }
