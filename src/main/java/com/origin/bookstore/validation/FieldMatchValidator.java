@@ -4,6 +4,8 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.BeanWrapperImpl;
 
+import java.util.Objects;
+
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
     private String field;
     private String fieldToMatch;
@@ -19,10 +21,6 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
         Object fieldValue = new BeanWrapperImpl(o).getPropertyValue(field);
         Object fieldValueToMatch = new BeanWrapperImpl(o).getPropertyValue(fieldToMatch);
 
-        if (fieldValue != null && fieldValueToMatch != null) {
-            return fieldValue.equals(fieldValueToMatch);
-        } else {
-            return false;
-        }
+        return Objects.equals(fieldValue, fieldValueToMatch);
     }
 }
