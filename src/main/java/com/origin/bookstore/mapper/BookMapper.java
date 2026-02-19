@@ -10,9 +10,9 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
-    public BookDto toDto(Book book);
+    BookDto toDto(Book book);
 
-    public Book toModel(CreateBookRequestDto bookRequestDto);
+    Book toModel(CreateBookRequestDto bookRequestDto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
