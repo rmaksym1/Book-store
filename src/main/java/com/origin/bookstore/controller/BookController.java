@@ -1,11 +1,12 @@
 package com.origin.bookstore.controller;
 
-import com.origin.bookstore.dto.BookDto;
-import com.origin.bookstore.dto.BookSearchParameters;
-import com.origin.bookstore.dto.CreateBookRequestDto;
+import com.origin.bookstore.dto.book.BookDto;
+import com.origin.bookstore.dto.book.BookSearchParameters;
+import com.origin.bookstore.dto.book.CreateBookRequestDto;
 import com.origin.bookstore.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +42,7 @@ public class BookController {
 
     @PostMapping
     @Operation(summary = "Create book", description = "Create a new book")
-    public BookDto createBook(@RequestBody CreateBookRequestDto bookDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
@@ -54,7 +55,8 @@ public class BookController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update book by id", description = "Update a book by id")
-    public BookDto updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+    public BookDto updateBook(@PathVariable Long id,
+                              @RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.updateBook(id, bookDto);
     }
 

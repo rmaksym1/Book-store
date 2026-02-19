@@ -1,8 +1,8 @@
 package com.origin.bookstore.service.impl;
 
-import com.origin.bookstore.dto.BookDto;
-import com.origin.bookstore.dto.BookSearchParameters;
-import com.origin.bookstore.dto.CreateBookRequestDto;
+import com.origin.bookstore.dto.book.BookDto;
+import com.origin.bookstore.dto.book.BookSearchParameters;
+import com.origin.bookstore.dto.book.CreateBookRequestDto;
 import com.origin.bookstore.exception.EntityNotFoundException;
 import com.origin.bookstore.mapper.BookMapper;
 import com.origin.bookstore.model.Book;
@@ -51,7 +51,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBook(Long id, BookDto bookDto) {
+    public BookDto updateBook(Long id, CreateBookRequestDto bookDto) {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find and update book by id: " + id)
         );

@@ -1,8 +1,8 @@
 package com.origin.bookstore.service;
 
-import com.origin.bookstore.dto.BookDto;
-import com.origin.bookstore.dto.BookSearchParameters;
-import com.origin.bookstore.dto.CreateBookRequestDto;
+import com.origin.bookstore.dto.book.BookDto;
+import com.origin.bookstore.dto.book.BookSearchParameters;
+import com.origin.bookstore.dto.book.CreateBookRequestDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +15,7 @@ public interface BookService {
 
     void deleteById(Long id);
 
-    BookDto updateBook(Long id, BookDto bookDto);
+    BookDto updateBook(Long id, CreateBookRequestDto bookDto);
 
     Page<BookDto> search(BookSearchParameters bookSearchParameters, Pageable pageable);
 }
