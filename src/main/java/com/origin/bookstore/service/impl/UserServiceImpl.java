@@ -2,6 +2,7 @@ package com.origin.bookstore.service.impl;
 
 import com.origin.bookstore.dto.user.UserRegistrationRequestDto;
 import com.origin.bookstore.dto.user.UserResponseDto;
+import com.origin.bookstore.exception.EntityNotFoundException;
 import com.origin.bookstore.exception.RegistrationException;
 import com.origin.bookstore.mapper.UserMapper;
 import com.origin.bookstore.model.Role;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 
         Role userRole = roleRepository.findByName(Role.RoleName.ROLE_USER).orElseThrow(()
-                -> new RuntimeException("Role not found"));
+                -> new EntityNotFoundException("Role " + Role.RoleName.ROLE_USER + " not found"));
         user.setRoles(Set.of(userRole));
 
         return userMapper.toDto(userRepository.save(user));
