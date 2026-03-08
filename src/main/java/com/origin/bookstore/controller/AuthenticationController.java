@@ -1,7 +1,10 @@
 package com.origin.bookstore.controller;
 
+import com.origin.bookstore.dto.user.UserLoginRequestDto;
+import com.origin.bookstore.dto.user.UserLoginResponseDto;
 import com.origin.bookstore.dto.user.UserRegistrationRequestDto;
 import com.origin.bookstore.dto.user.UserResponseDto;
+import com.origin.bookstore.security.AuthenticationService;
 import com.origin.bookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,9 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final UserService userService;
 
+    private final AuthenticationService authenticationService;
+
     @PostMapping("/registration")
     @Operation(summary = "Create new user", description = "Create a new user")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request) {
         return userService.save(request);
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "User login", description = "Endpoint for user login")
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
+        return authenticationService.authenticate(request);
     }
 }
