@@ -37,3 +37,16 @@ databaseChangeLog:
               - column:
                   name: shipping_address
                   type: varchar(255)
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "admin" }
+              - column: { name: password, value: "$2a$10$59vPwc8ok425plSgCJQLC.CGsL/tPtaZBj04v0b3i/EREfqHaEkH2" }
+              - column: { name: first_name, value: "admin" }
+              - column: { name: last_name, value: "admin" }
