@@ -2,6 +2,7 @@ package com.origin.bookstore.dto.book;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -27,5 +28,6 @@ public class CreateBookRequestDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
+    @NotEmpty
     private Set<Long> categoryIds;
 }

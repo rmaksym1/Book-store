@@ -5,9 +5,6 @@ import com.origin.bookstore.dto.book.BookDto;
 import com.origin.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.origin.bookstore.dto.book.CreateBookRequestDto;
 import com.origin.bookstore.model.Book;
-import com.origin.bookstore.model.Category;
-import java.util.stream.Collectors;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -23,13 +20,4 @@ public interface BookMapper {
     void updateBook(CreateBookRequestDto bookDto, @MappingTarget Book book);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
-
-    @AfterMapping
-    default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
-        if (book.getCategories() != null) {
-            bookDto.setCategoryIds(book.getCategories().stream()
-                    .map(Category::getId)
-                    .collect(Collectors.toSet()));
-        }
-    }
 }
