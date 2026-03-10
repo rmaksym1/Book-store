@@ -11,8 +11,8 @@ import com.origin.bookstore.repository.book.BookRepository;
 import com.origin.bookstore.repository.category.CategoryRepository;
 import com.origin.bookstore.service.CategoryService;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +20,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final BookMapper bookMapper;
-
     private final BookRepository bookRepository;
-
     private final CategoryRepository categoryRepository;
-
     private final CategoryMapper categoryMapper;
 
     @Override
-    public List<CategoryDto> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable).stream()
-                .map(categoryMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<CategoryDto> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+                .map(categoryMapper::toDto);
     }
 
     @Override
@@ -50,14 +46,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(Long id, CreateCategoryRequestDto createCategoryRequestDto) {
-        if (!categoryRepository.existsById(id)) {
-            throw new EntityNotFoundException("Category with id: " + id
-                    + " not found and cannot be updated!");
-        }
-        Category category = categoryMapper.toEntity(createCategoryRequestDto);
-        category.setId(id);
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Category with id: " + id + " not found!"));
 
-        return categoryMapper.toDto(categoryRepository.save(category));
+        categoryMapper.updateCategory(createCategoryRequestDto, category);
+        categoryRepository.save(category);
+
+        return categoryMapper.toDto(category);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.origin.bookstore.dto.category;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class CategoryDto {
     private Long id;
-    @NotBlank
-    @Size(min = 1, max = 100)
     private String name;
     private String description;
 }
