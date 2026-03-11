@@ -9,6 +9,7 @@ import com.origin.bookstore.model.Role;
 import com.origin.bookstore.model.User;
 import com.origin.bookstore.repository.role.RoleRepository;
 import com.origin.bookstore.repository.user.UserRepository;
+import com.origin.bookstore.service.ShoppingCartService;
 import com.origin.bookstore.service.UserService;
 import jakarta.transaction.Transactional;
 import java.util.Set;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     @Transactional
@@ -38,7 +40,9 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByName(Role.RoleName.ROLE_USER).orElseThrow(()
                 -> new EntityNotFoundException("Role " + Role.RoleName.ROLE_USER + " not found"));
         user.setRoles(Set.of(userRole));
+        User savedUser = userRepository.save(user);
+        shoppingCartService.createShoppingCartForUser(user);
 
-        return userMapper.toDto(userRepository.save(user));
+        return userMapper.toDto(savedUser);
     }
 }
