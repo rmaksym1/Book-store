@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
@@ -25,7 +26,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    @Transactional
     public ShoppingCartResponseDto addBookToCart(User user, CartItemRequestDto cartItemRequestDto) {
         ShoppingCart shoppingCart = shoppingCartRepository
                 .findByUserId(user.getId()).orElseThrow(
@@ -66,7 +66,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    @Transactional
     public ShoppingCartResponseDto updateBookQuantityInCart(
             User user,
             Long cartItemId,
@@ -90,7 +89,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    @Transactional
     public void deleteBookFromCart(User user, Long cartItemId) {
         CartItem cartItem = cartItemRepository.findByIdAndShoppingCartUserId(
                 cartItemId,
