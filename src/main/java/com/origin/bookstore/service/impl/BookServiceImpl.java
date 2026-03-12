@@ -11,6 +11,7 @@ import com.origin.bookstore.repository.book.BookRepository;
 import com.origin.bookstore.repository.book.BookSpecificationBuilder;
 import com.origin.bookstore.repository.category.CategoryRepository;
 import com.origin.bookstore.service.BookService;
+import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class BookServiceImpl implements BookService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Transactional
     public BookDto save(CreateBookRequestDto bookRequestDto) {
         Book book = bookMapper.toModel(bookRequestDto);
         Set<Category> categories = new HashSet<>(
