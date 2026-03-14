@@ -3,7 +3,6 @@ package com.origin.bookstore.service;
 import com.origin.bookstore.dto.book.BookDto;
 import com.origin.bookstore.dto.category.CategoryDto;
 import com.origin.bookstore.dto.category.CreateCategoryRequestDto;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,5 +17,5 @@ public interface CategoryService {
 
     void deleteById(Long id);
 
-    List<BookDto> getBooksByCategoryId(Long id, Pageable pageable);
+    Page<BookDto> getBooksByCategoryId(Long id, Pageable pageable);
 }

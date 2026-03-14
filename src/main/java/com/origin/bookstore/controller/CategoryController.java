@@ -7,7 +7,6 @@ import com.origin.bookstore.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -74,7 +73,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}/books")
     @Operation(summary = "Get books by category id", description = "Get books by category id")
-    public List<BookDto> getBooksByCategoryId(@PathVariable Long id, Pageable pageable) {
+    public Page<BookDto> getBooksByCategoryId(@PathVariable Long id, Pageable pageable) {
         return categoryService.getBooksByCategoryId(id, pageable);
     }
 }

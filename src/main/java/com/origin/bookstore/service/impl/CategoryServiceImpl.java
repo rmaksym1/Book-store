@@ -10,7 +10,6 @@ import com.origin.bookstore.model.Category;
 import com.origin.bookstore.repository.book.BookRepository;
 import com.origin.bookstore.repository.category.CategoryRepository;
 import com.origin.bookstore.service.CategoryService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,9 +60,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<BookDto> getBooksByCategoryId(Long id, Pageable pageable) {
-        return bookRepository.findAllByCategoryId(id, pageable).stream()
-                .map(bookMapper::toDto)
-                .toList();
+    public Page<BookDto> getBooksByCategoryId(Long id, Pageable pageable) {
+        return bookRepository.findAllByCategoriesId(id, pageable)
+                .map(bookMapper::toDto);
     }
 }
