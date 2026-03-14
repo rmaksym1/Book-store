@@ -29,7 +29,8 @@ public class CustomGlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
-        return new ResponseEntity<>("Access denied", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>("Access denied",
+                HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
