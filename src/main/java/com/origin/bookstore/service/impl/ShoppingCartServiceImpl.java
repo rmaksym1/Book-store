@@ -28,7 +28,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartResponseDto addBookToCart(User user, CartItemRequestDto cartItemRequestDto) {
         ShoppingCart shoppingCart = shoppingCartRepository
-                .findByUserId(user.getId()).orElseThrow(
+                .findByUser(user).orElseThrow(
                         () -> new EntityNotFoundException("Shopping cart by user id: "
                                 + user.getId() + " not found")
                 );
@@ -52,7 +52,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartResponseDto getShoppingCartByUserId(User user) {
         return shoppingCartMapper.toDto(shoppingCartRepository
-                .findByUserId(user.getId()).orElseThrow(
+                .findByUser(user).orElseThrow(
                         () -> new EntityNotFoundException("Shopping cart by user id: "
                                 + user.getId() + " not found")
                 ));
@@ -79,7 +79,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         cartItem.setQuantity(updateCartItemRequestDto.quantity());
 
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId())
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user)
                 .orElseThrow(
                         () -> new EntityNotFoundException("Can't find shopping cart by user id: "
                                 + user.getId())
@@ -98,5 +98,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         );
 
         cartItemRepository.delete(cartItem);
+    }
+
+    @Override
+    public void clearShoppingCart(User user) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user).orElseThrow(
+                () -> new EntityNotFoundException("Can't find shopping cart by user id: "
+                        + user.getId())
+        );
+
+        shoppingCart.getCartItems().clear();
     }
 }
