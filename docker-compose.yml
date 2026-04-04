@@ -18,7 +18,8 @@ services:
   app:
     build: .
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_healthy
     restart: on-failure
     env_file: .env
     ports:
