@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CategoryRepositoryTest {
     private static final String ADD_CATEGORY_PATH =
             "/database/categories/add-category-to-categories-table.sql";
+    private static final String REMOVE_CATEGORY_PATH =
+            "/database/categories/remove-category-from-categories-table.sql";
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -34,7 +36,10 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    @Sql(ADD_CATEGORY_PATH)
+    @Sql(scripts = ADD_CATEGORY_PATH,
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = REMOVE_CATEGORY_PATH,
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Soft deleting category by id")
     void delete_ShouldMarkAsDeleted() {
         Long id = 1L;

@@ -24,10 +24,16 @@ public class CategoryControllerTest {
             "/categories";
     private static final String API_PATH_ID =
             "/categories/{id}";
+    private static final String CATEGORY_ID_BOOKS_API_PATH_ID =
+            "/categories/{id}/books";
     private static final String ADD_CATEGORY_PATH =
             "/database/categories/add-category-to-categories-table.sql";
     private static final String REMOVE_CATEGORY_PATH =
             "/database/categories/remove-category-from-categories-table.sql";
+    private static final String ADD_BOOK_PATH =
+            "/database/books/add-books-with-categories.sql";
+    private static final String REMOVE_BOOK_PATH =
+            "/database/books/remove-books-with-categories.sql";
     private static final String ID_JSON_PATH =
             "$.id";
     private static final String NAME_JSON_PATH =
@@ -39,6 +45,7 @@ public class CategoryControllerTest {
     private static final Integer CATEGORY_ID = 2;
     private static final Integer INVALID_CATEGORY_ID = 456;
     private static final String CATEGORY_NAME = "Fiction";
+    private static final String BOOK_TITLE = "Python Basics";
 
     @Autowired
     private MockMvc mockMvc;
@@ -223,6 +230,37 @@ public class CategoryControllerTest {
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden()
+                );
+    }
+
+    @Test
+    @DisplayName("Should return books by category id")
+    @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = ADD_BOOK_PATH,
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = REMOVE_BOOK_PATH,
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void getBooksByCategoryId_Request_ReturnsPageOfBookDtos() throws Exception {
+        int categoryId = 4;
+        mockMvc.perform(get(CATEGORY_ID_BOOKS_API_PATH_ID, categoryId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].title").value(BOOK_TITLE)
+                );
+    }
+
+    @Test
+    @DisplayName("Should return empty page by invalid category id")
+    @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = ADD_BOOK_PATH,
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = REMOVE_BOOK_PATH,
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void getBooksByInvalidCategoryId_Request_ReturnsEmptyPage() throws Exception {
+        mockMvc.perform(get(CATEGORY_ID_BOOKS_API_PATH_ID, INVALID_CATEGORY_ID)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty()
                 );
     }
 }
