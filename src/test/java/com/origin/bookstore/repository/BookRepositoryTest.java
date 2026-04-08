@@ -3,7 +3,6 @@ package com.origin.bookstore.repository;
 import com.origin.bookstore.model.Book;
 import com.origin.bookstore.model.Category;
 import com.origin.bookstore.repository.book.BookRepository;
-import com.origin.bookstore.repository.category.CategoryRepository;
 import com.origin.bookstore.util.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,6 +25,7 @@ class BookRepositoryTest {
             "/database/books/add-books-with-categories.sql";
     private static final String REMOVE_BOOK_PATH =
             "/database/books/remove-books-with-categories.sql";
+
     @Autowired
     private BookRepository bookRepository;
 

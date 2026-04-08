@@ -56,8 +56,6 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should successfully create category and return 201")
     @WithMockUser(roles = ADMIN_ROLE)
-    @Sql(scripts = ADD_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = REMOVE_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createCategory_Request_ReturnsCreated() throws Exception {
@@ -73,7 +71,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-        @DisplayName("Should return forbidden if user tries to create category")
+    @DisplayName("Should return forbidden if user tries to create category")
     @WithMockUser(roles = USER_ROLE)
     void createCategoryByUser_Request_ReturnsForbidden() throws Exception {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
@@ -243,7 +241,7 @@ public class CategoryControllerTest {
     void getBooksByCategoryId_Request_ReturnsPageOfBookDtos() throws Exception {
         int categoryId = 4;
         mockMvc.perform(get(CATEGORY_ID_BOOKS_API_PATH_ID, categoryId)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].title").value(BOOK_TITLE)
                 );

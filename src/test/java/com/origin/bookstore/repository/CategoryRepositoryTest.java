@@ -32,7 +32,7 @@ public class CategoryRepositoryTest {
         Category category1 = categoryRepository.findById(savedCategory.getId())
                 .orElseThrow(() -> new AssertionError("Category not found!"));
 
-        assertEquals("Chemistry", category1.getName());
+        assertEquals(category.getName(), category1.getName());
     }
 
     @Test

@@ -3,11 +3,13 @@ package com.origin.bookstore.dto.user;
 import com.origin.bookstore.validation.FieldMatch;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @FieldMatch(
         field = "password",
         fieldToMatch = "repeatPassword"
