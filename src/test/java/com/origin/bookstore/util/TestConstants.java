@@ -25,7 +25,9 @@ public class TestConstants {
     public static final String ADD_ORDER_PATH =
             "/database/orders/add-order-to-orders-table.sql";
     public static final String REMOVE_ORDER_PATH =
-        "/database/orders/remove-order-from-orders-table.sql";
+            "/database/orders/remove-order-from-orders-table.sql";
+    public static final String CLEANUP_DB_PATH =
+            "/database/cleanup-db.sql";
 
     public static final String ADMIN_ROLE = "ADMIN";
     public static final String USER_ROLE = "USER";

@@ -38,10 +38,10 @@ public class ShoppingCartRepositoryTest {
 
     @Test
     @DisplayName("Soft deleting shopping cart by id")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH,
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH,
-        executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void softDeleteShoppingCartById_ShouldMarkAsDeleted() {
         shoppingCartRepository.deleteById(1L);
 
@@ -51,10 +51,10 @@ public class ShoppingCartRepositoryTest {
 
     @Test
     @DisplayName("Should return the shopping cart by user")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findShoppingCartByUser_ReturnsShoppingCart() {
         User user = TestUtil.createUser();
         user.setId(5L);

@@ -10,9 +10,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
-
 import static com.origin.bookstore.util.TestConstants.ADD_CATEGORY_PATH;
-import static com.origin.bookstore.util.TestConstants.REMOVE_CATEGORY_PATH;
+import static com.origin.bookstore.util.TestConstants.CLEANUP_DB_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -23,6 +22,8 @@ public class CategoryRepositoryTest {
 
     @Test
     @DisplayName("Save then find a category by id")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveAndFind_ValidCategory_ReturnsCategory() {
         Category category = TestUtil.createCategory();
 
@@ -34,10 +35,10 @@ public class CategoryRepositoryTest {
     }
 
     @Test
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Soft deleting category by id")
     void delete_ShouldMarkAsDeleted() {
         Long id = 1L;
@@ -48,6 +49,8 @@ public class CategoryRepositoryTest {
 
     @Test
     @DisplayName("Should throw exception when saving categories with same name")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveCategoriesBySameName_ThrowsException() {
         Category category = TestUtil.createCategory();
 

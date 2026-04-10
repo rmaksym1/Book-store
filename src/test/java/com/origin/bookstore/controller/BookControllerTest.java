@@ -42,10 +42,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully create book")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createBook_Request_ReturnsBookDto() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         requestDto.setCategoryIds(Set.of(4L));
@@ -62,6 +62,8 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return bad request if book doesn't have a title")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void createBookWithoutTitle_Request_ReturnsBadRequest() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         requestDto.setTitle(null);
@@ -77,6 +79,8 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return forbidden if user tries to create a book")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void createBookByUser_Request_ReturnsForbidden() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         requestDto.setCategoryIds(Set.of(5L));
@@ -92,10 +96,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully get all books")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllBooks_Request_ReturnsBookDtos() throws Exception {
         mockMvc.perform(get(API_BOOKS_PATH))
                 .andExpect(status().isOk())
@@ -106,10 +110,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully get a book by id")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookById_Request_ReturnsBookDto() throws Exception {
         mockMvc.perform(get(API_BOOKS_PATH_ID, BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -124,10 +128,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return 404 if book not found by id")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookByInvalidId_Request_ReturnsNotFound() throws Exception {
         mockMvc.perform(get(API_BOOKS_PATH_ID, INVALID_BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -139,10 +143,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully delete a book by id")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteBook_Request_ReturnsNoContent() throws Exception {
         mockMvc.perform(delete(API_BOOKS_PATH_ID, BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -153,10 +157,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return forbidden when user is deleting a book")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteBookByUser_Request_ReturnsForbidden() throws Exception {
         mockMvc.perform(delete(API_BOOKS_PATH_ID, BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -167,10 +171,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully update a book by id")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateBook_Request_ReturnsBookDto() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -188,10 +192,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return 404 when updating invalid book")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateInvalidBook_Request_ReturnsNotFound() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -206,10 +210,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return forbidden when user updating a book")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateBookByUser_Request_ReturnsForbidden() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -224,10 +228,10 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return books matching search parameters")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void searchBooks_ValidParameters_ReturnsMatchingBooks() throws Exception {
 
         mockMvc.perform(get(API_BOOKS_SEARCH_PATH)

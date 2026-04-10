@@ -10,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
-import static com.origin.bookstore.util.TestConstants.ADD_USER_PATH;
-import static com.origin.bookstore.util.TestConstants.REMOVE_USERS_PATH;
+
+import static com.origin.bookstore.util.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -24,6 +24,8 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Should successfully save and find user by id")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveUser_ThenFindUserById_ReturnsUser() {
         User user = TestUtil.createUser();
         User savedUser = userRepository.save(user);
@@ -33,10 +35,10 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Should throw an exception if email is occupied")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_USER_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_USERS_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void saveUser_ThrowsException_WhenEmailIsNotUnique() {
         User user = TestUtil.createUser();
         user.setEmail("rudycooper@gmail.com");
@@ -46,10 +48,10 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("Soft deleting user by id")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_USER_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_USERS_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void softDeleteUser_ShouldMarkAsDeleted() {
         userRepository.deleteById(5L);
 

@@ -33,11 +33,10 @@ public class ShoppingCartControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should add book to cart")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void addBookToCart_ValidRequest_ReturnsCreated() throws Exception {
         CartItemRequestDto requestDto = new CartItemRequestDto(2L, 2);
@@ -52,11 +51,10 @@ public class ShoppingCartControllerTest {
     @Test
     @WithUserDetails("rudycooper@gmail.com")
     @DisplayName("Should return 404 when saving book for invalid cart")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_USER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_USERS_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void addBookToInvalidCart_ValidRequest_ReturnsNotFound() throws Exception {
         CartItemRequestDto requestDto = new CartItemRequestDto(1L, 5);
@@ -70,11 +68,10 @@ public class ShoppingCartControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should get items from shopping cart")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getCartItems_ReturnsShoppingCart() throws Exception {
         mockMvc.perform(get(CART_URL))
@@ -86,11 +83,10 @@ public class ShoppingCartControllerTest {
     @Test
     @WithUserDetails("rudycooper@gmail.com")
     @DisplayName("Should return 404 when cart is not found")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_USER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_USERS_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getCartItems_CartNotFound_ReturnsNotFound() throws Exception {
         mockMvc.perform(get(CART_URL))
@@ -100,10 +96,10 @@ public class ShoppingCartControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should successfully update book quantity in cart")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateBookQuantityInCart_ValidRequest_ReturnsShoppingCart() throws Exception {
         UpdateCartItemRequestDto cartItemRequestDto = TestUtil.createUpdateCartItemRequestDto();
 
@@ -118,10 +114,10 @@ public class ShoppingCartControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should return bad request when updating negative book quantity in cart")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateBookNegativeQuantityInCart_ReturnsBadRequest() throws Exception {
         UpdateCartItemRequestDto cartItemRequestDto = new UpdateCartItemRequestDto(-999);
 
@@ -135,10 +131,10 @@ public class ShoppingCartControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should delete a book from shopping cart")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteBookFromCart_ValidRequest_ReturnsNoContent() throws Exception {
         mockMvc.perform(delete(CART_ITEMS_CART_ITEM_ID_URL, CART_ITEM_ID)
                 .contentType(MediaType.APPLICATION_JSON))

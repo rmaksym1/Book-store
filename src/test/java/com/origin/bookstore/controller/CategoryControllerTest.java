@@ -35,8 +35,8 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should successfully create category and return 201")
     @WithMockUser(roles = ADMIN_ROLE)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void createCategory_Request_ReturnsCreated() throws Exception {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -52,6 +52,8 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return forbidden if user tries to create category")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void createCategoryByUser_Request_ReturnsForbidden() throws Exception {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -81,10 +83,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should successfully get all categories")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllCategories_Request_ReturnsCategoryDtos() throws Exception {
         mockMvc.perform(get(API_CATEGORY_PATH))
                 .andExpect(status().isOk())
@@ -96,10 +98,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should successfully get a category by id")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findCategoryById_Request_ReturnsCategoryDto() throws Exception {
         mockMvc.perform(get(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -114,10 +116,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return 404 if category not found by id")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findCategoryByInvalidId_Request_ReturnsNotFound() throws Exception {
         mockMvc.perform(get(API_CATEGORY_PATH_ID, INVALID_CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -129,10 +131,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should successfully delete a category by id")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteCategory_Request_ReturnsNoContent() throws Exception {
         mockMvc.perform(delete(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -143,10 +145,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return forbidden when user is deleting a category")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteCategoryByUser_Request_ReturnsForbidden() throws Exception {
         mockMvc.perform(delete(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -157,10 +159,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should successfully update a category by id")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateCategory_Request_ReturnsCategoryDto() throws Exception {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -177,10 +179,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return 404 when updating invalid category")
     @WithMockUser(roles = ADMIN_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateInvalidCategory_Request_ReturnsNotFound() throws Exception {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -195,10 +197,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return forbidden when user updating a category")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateCategoryByUser_Request_ReturnsForbidden() throws Exception {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
@@ -213,10 +215,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return books by category id")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getBooksByCategoryId_Request_ReturnsPageOfBookDtos() throws Exception {
         int categoryId = 4;
         mockMvc.perform(get(CATEGORY_ID_BOOKS_API_PATH_ID, categoryId)
@@ -229,10 +231,10 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Should return empty page by invalid category id")
     @WithMockUser(roles = USER_ROLE)
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getBooksByInvalidCategoryId_Request_ReturnsEmptyPage() throws Exception {
         mockMvc.perform(get(CATEGORY_ID_BOOKS_API_PATH_ID, INVALID_CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))

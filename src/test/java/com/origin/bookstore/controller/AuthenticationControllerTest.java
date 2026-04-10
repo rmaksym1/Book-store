@@ -32,6 +32,8 @@ class AuthenticationControllerTest {
 
     @Test
     @DisplayName("Register a new user successfully")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void register_ValidRequest_ReturnsUserResponse() throws Exception {
         UserRegistrationRequestDto request = TestUtil.createUserRegistrationRequestDto();
 
@@ -45,11 +47,10 @@ class AuthenticationControllerTest {
 
     @Test
     @DisplayName("Should login user successfully and return token")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_USER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_USERS_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void login_ValidRequest_ReturnsToken() throws Exception {
         UserLoginRequestDto request = new UserLoginRequestDto("rudycooper@gmail.com", "example");
@@ -64,6 +65,8 @@ class AuthenticationControllerTest {
 
     @Test
     @DisplayName("Register with invalid data should return bad request")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void register_InvalidRequest_ReturnsBadRequest() throws Exception {
         UserRegistrationRequestDto invalidRequest = TestUtil.createUserRegistrationRequestDto();
         invalidRequest.setEmail("not an email");
@@ -77,11 +80,10 @@ class AuthenticationControllerTest {
 
     @Test
     @DisplayName("Register with existing email should return conflict")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_USER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_USERS_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void register_DuplicateEmail_ReturnsConflict() throws Exception {
         UserRegistrationRequestDto request = TestUtil.createUserRegistrationRequestDto();

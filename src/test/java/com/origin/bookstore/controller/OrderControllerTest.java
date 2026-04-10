@@ -33,11 +33,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should successfully create an order")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_SHOPPINGCART_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_SHOPPINGCART_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void createOrder_ValidRequest_ReturnsOrderResponseDto() throws Exception {
         OrderRequestDto requestDto = TestUtil.createOrderRequestDto();
@@ -54,11 +53,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("rudycooper@gmail.com")
     @DisplayName("Should return 404 if shopping cart not found while creating order")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_USER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_USERS_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void createOrderWithIncorrectCart_ValidRequest_ReturnsNotFound() throws Exception {
         OrderRequestDto requestDto = TestUtil.createOrderRequestDto();
@@ -73,11 +71,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should return a list of orders by user")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getAllOrders_ValidRequest_ReturnsOrderList() throws Exception {
         mockMvc.perform(get(ORDERS_URL)
@@ -95,11 +92,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should return a list of order items")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getAllOrderItemsInOrder_ValidRequest_ReturnsOrderItemsList() throws Exception {
         Long orderId = ID;
@@ -114,11 +110,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should return 404 if order is not found")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getAllOrderItemsInIncorrectOrder_ValidRequest_ReturnsNotFound() throws Exception {
         mockMvc.perform(get(ORDERS_ORDER_ID_ITEMS_URL, INCORRECT_ID)
@@ -130,11 +125,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should successfully get order item by id")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getOrderItemById_ValidRequest_ReturnsOrderItem() throws Exception {
         mockMvc.perform(get(ORDER_ID_ITEMS_ID_URL, ID, ID))
@@ -146,11 +140,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should return 404 when order item id is incorrect")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getOrderItemByIncorrectId_ValidRequest_ReturnsNotFound() throws Exception {
         mockMvc.perform(get(ORDER_ID_ITEMS_ID_URL, ID, INCORRECT_ID))
@@ -160,17 +153,13 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("admin@gmail.com")
     @DisplayName("Should successfully update order status")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ADMIN_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
-    @Sql(scripts = REMOVE_USERS_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
-    )
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void updateOrderStatus_ValidRequest_ReturnsUpdatedOrder() throws Exception {
         UpdateOrderStatusRequestDto requestDto = TestUtil.createUpdateOrderStatusRequestDto();
@@ -186,17 +175,13 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("admin@gmail.com")
     @DisplayName("Should return 404 if order not found while updating status")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ADMIN_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
-    @Sql(scripts = REMOVE_USERS_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
-    )
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void updateInvalidOrderStatus_ValidRequest_ReturnsNotFound() throws Exception {
         UpdateOrderStatusRequestDto requestDto = TestUtil.createUpdateOrderStatusRequestDto();
@@ -211,11 +196,10 @@ public class OrderControllerTest {
     @Test
     @WithUserDetails("user@gmail.com")
     @DisplayName("Should return forbidden when updating order status as user")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_ORDER_PATH, executionPhase =
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(scripts = REMOVE_ORDER_PATH, executionPhase =
-            Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void updateOrderStatusByUser_ValidRequest_ReturnsForbidden() throws Exception {
         UpdateOrderStatusRequestDto requestDto = TestUtil.createUpdateOrderStatusRequestDto();
