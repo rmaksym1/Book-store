@@ -10,16 +10,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
+
+import static com.origin.bookstore.util.TestConstants.ADD_CATEGORY_PATH;
+import static com.origin.bookstore.util.TestConstants.REMOVE_CATEGORY_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CategoryRepositoryTest {
-    private static final String ADD_CATEGORY_PATH =
-            "/database/categories/add-category-to-categories-table.sql";
-    private static final String REMOVE_CATEGORY_PATH =
-            "/database/categories/remove-category-from-categories-table.sql";
-
     @Autowired
     private CategoryRepository categoryRepository;
 

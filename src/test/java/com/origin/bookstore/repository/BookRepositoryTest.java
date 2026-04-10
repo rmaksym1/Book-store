@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 import java.util.Set;
+
+import static com.origin.bookstore.util.TestConstants.ADD_BOOK_PATH;
+import static com.origin.bookstore.util.TestConstants.REMOVE_BOOK_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,11 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
-    private static final String ADD_BOOK_PATH =
-            "/database/books/add-books-with-categories.sql";
-    private static final String REMOVE_BOOK_PATH =
-            "/database/books/remove-books-with-categories.sql";
-
     @Autowired
     private BookRepository bookRepository;
 

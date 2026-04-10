@@ -13,6 +13,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Set;
+
+import static com.origin.bookstore.util.TestConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,26 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class BookControllerTest {
-    private static final String API_PATH =
-            "/books";
-    private static final String API_PATH_ID =
-            "/books/{id}";
-    private static final String ADD_BOOKS_PATH =
-            "/database/books/add-books-with-categories.sql";
-    private static final String REMOVE_BOOKS_PATH =
-            "/database/books/remove-books-with-categories.sql";
-    private static final String API_SEARCH_PATH =
-            "/books/search";
-    private static final String ID_JSON_PATH =
-            "$.id";
     private static final String TITLE_JSON_PATH =
             "$.title";
     private static final String AUTHOR_JSON_PATH =
             "$.author";
-    private static final String CONTENT_JSON_PATH =
-            "$.content";
-    private static final String ADMIN_ROLE = "ADMIN";
-    private static final String USER_ROLE = "USER";
     private static final Integer BOOK_ID = 7;
     private static final Integer INVALID_BOOK_ID = 999;
     private static final String BOOK_AUTHOR = "Sam Sapiol";
@@ -56,16 +42,16 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully create book")
     @WithMockUser(roles = ADMIN_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void createBook_Request_ReturnsBookDto() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         requestDto.setCategoryIds(Set.of(4L));
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(post(API_PATH)
+        mockMvc.perform(post(API_BOOKS_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isOk())
@@ -81,7 +67,7 @@ public class BookControllerTest {
         requestDto.setTitle(null);
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(post(API_PATH)
+        mockMvc.perform(post(API_BOOKS_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest()
@@ -96,7 +82,7 @@ public class BookControllerTest {
         requestDto.setCategoryIds(Set.of(5L));
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(post(API_PATH)
+        mockMvc.perform(post(API_BOOKS_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isForbidden()
@@ -106,31 +92,31 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully get all books")
     @WithMockUser(roles = USER_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllBooks_Request_ReturnsBookDtos() throws Exception {
-        mockMvc.perform(get(API_PATH))
+        mockMvc.perform(get(API_BOOKS_PATH))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(CONTENT_JSON_PATH).isArray())
-                .andExpect(jsonPath(CONTENT_JSON_PATH + ".length()").value(1));
+                .andExpect(jsonPath($_CONTENT).isArray())
+                .andExpect(jsonPath($_CONTENT + ".length()").value(1));
     }
 
     @Test
     @DisplayName("Should successfully get a book by id")
     @WithMockUser(roles = USER_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookById_Request_ReturnsBookDto() throws Exception {
-        mockMvc.perform(get(API_PATH_ID, BOOK_ID)
+        mockMvc.perform(get(API_BOOKS_PATH_ID, BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
-                .andExpect(jsonPath(ID_JSON_PATH, is(BOOK_ID)))
+                .andExpect(jsonPath($_ID, is(BOOK_ID)))
                 .andExpect(jsonPath(TITLE_JSON_PATH, is(BOOK_TITLE)))
                 .andExpect(jsonPath(AUTHOR_JSON_PATH, is(BOOK_AUTHOR)));
     }
@@ -138,12 +124,12 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return 404 if book not found by id")
     @WithMockUser(roles = USER_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookByInvalidId_Request_ReturnsNotFound() throws Exception {
-        mockMvc.perform(get(API_PATH_ID, INVALID_BOOK_ID)
+        mockMvc.perform(get(API_BOOKS_PATH_ID, INVALID_BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNotFound()
@@ -153,12 +139,12 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully delete a book by id")
     @WithMockUser(roles = ADMIN_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteBook_Request_ReturnsNoContent() throws Exception {
-        mockMvc.perform(delete(API_PATH_ID, BOOK_ID)
+        mockMvc.perform(delete(API_BOOKS_PATH_ID, BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNoContent());
@@ -167,12 +153,12 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return forbidden when user is deleting a book")
     @WithMockUser(roles = USER_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteBookByUser_Request_ReturnsForbidden() throws Exception {
-        mockMvc.perform(delete(API_PATH_ID, BOOK_ID)
+        mockMvc.perform(delete(API_BOOKS_PATH_ID, BOOK_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isForbidden());
@@ -181,19 +167,19 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should successfully update a book by id")
     @WithMockUser(roles = ADMIN_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateBook_Request_ReturnsBookDto() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-                mockMvc.perform(put(API_PATH_ID, BOOK_ID)
+                mockMvc.perform(put(API_BOOKS_PATH_ID, BOOK_ID)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath(ID_JSON_PATH, is(BOOK_ID)))
+                        .andExpect(jsonPath($_ID, is(BOOK_ID)))
                         .andExpect(jsonPath(TITLE_JSON_PATH, is(requestDto.getTitle())))
                         .andExpect(jsonPath(AUTHOR_JSON_PATH, is(requestDto.getAuthor()))
                         );
@@ -202,15 +188,15 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return 404 when updating invalid book")
     @WithMockUser(roles = ADMIN_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateInvalidBook_Request_ReturnsNotFound() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(put(API_PATH_ID, INVALID_BOOK_ID)
+        mockMvc.perform(put(API_BOOKS_PATH_ID, INVALID_BOOK_ID)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound()
@@ -220,15 +206,15 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return forbidden when user updating a book")
     @WithMockUser(roles = USER_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void updateBookByUser_Request_ReturnsForbidden() throws Exception {
         CreateBookRequestDto requestDto = TestUtil.createBookRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(put(API_PATH_ID, BOOK_ID)
+        mockMvc.perform(put(API_BOOKS_PATH_ID, BOOK_ID)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden()
@@ -238,19 +224,19 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should return books matching search parameters")
     @WithMockUser(roles = USER_ROLE)
-    @Sql(scripts = ADD_BOOKS_PATH,
+    @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOKS_PATH,
+    @Sql(scripts = REMOVE_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void searchBooks_ValidParameters_ReturnsMatchingBooks() throws Exception {
 
-        mockMvc.perform(get(API_SEARCH_PATH)
+        mockMvc.perform(get(API_BOOKS_SEARCH_PATH)
                         .param("authors", BOOK_AUTHOR)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(CONTENT_JSON_PATH, hasSize(1)))
-                .andExpect(jsonPath(CONTENT_JSON_PATH + "[0].title", is(BOOK_TITLE)))
-                .andExpect(jsonPath( CONTENT_JSON_PATH + "[0].author", is(BOOK_AUTHOR))
+                .andExpect(jsonPath($_CONTENT, hasSize(1)))
+                .andExpect(jsonPath($_CONTENT + "[0].title", is(BOOK_TITLE)))
+                .andExpect(jsonPath( $_CONTENT + "[0].author", is(BOOK_AUTHOR))
                 );
     }
 }

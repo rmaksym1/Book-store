@@ -10,18 +10,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
+import static com.origin.bookstore.util.TestConstants.ADD_USER_PATH;
+import static com.origin.bookstore.util.TestConstants.REMOVE_USERS_PATH;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserRepositoryTest {
-    private static final String ADD_USER_PATH =
-            "/database/users/add-user-to-users-table.sql";
-    private static final String REMOVE_USERS_PATH =
-            "/database/users/remove-users-from-users-table.sql";
-    private static final String ADD_ADMIN_PATH =
-            "/database/user/add-admin-to-users-table.sql";
 
     @Autowired
     private UserRepository userRepository;

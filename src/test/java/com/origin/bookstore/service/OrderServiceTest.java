@@ -26,21 +26,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import static com.origin.bookstore.util.TestConstants.pageable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
-    private static final Pageable pageable = PageRequest.of(0, 10);
-
     @Mock
     private OrderMapper orderMapper;
 
@@ -135,17 +131,24 @@ public class OrderServiceTest {
     void getAll_ValidOrdersItemsById_ReturnsOrdersItemsList() {
         Long orderId = 7L;
         User user = TestUtil.createUser();
-        OrderItemResponseDto orderItemResponseDto = TestUtil.createOrderItemResponseDto();
-        List<OrderItem> orderItems = new ArrayList<>();
+        user.setId(1L);
+
+        Order order = new Order();
+        order.setId(orderId);
+        order.setUser(user);
+
         OrderItem orderItem = TestUtil.createOrderItem();
+        OrderItemResponseDto orderItemResponseDto = TestUtil.createOrderItemResponseDto();
+        List<OrderItem> orderItems = List.of(orderItem);
 
-        orderItems.add(orderItem);
-
+        when(orderRepository.findByIdAndUser(orderId, user)).thenReturn(Optional.of(order));
         when(orderItemRepository.findAllByOrderIdAndOrderUser(orderId, user)).thenReturn(orderItems);
         when(orderItemMapper.toDto(orderItem)).thenReturn(orderItemResponseDto);
 
-        orderService.getAllOrderItems(user, orderId);
+        List<OrderItemResponseDto> result = orderService.getAllOrderItems(user, orderId);
 
+        assertNotNull(result);
+        assertEquals(1, result.size());
         verify(orderItemRepository).findAllByOrderIdAndOrderUser(orderId, user);
         verify(orderItemMapper).toDto(orderItem);
     }

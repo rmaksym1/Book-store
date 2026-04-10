@@ -11,17 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
-
+import static com.origin.bookstore.util.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ShoppingCartRepositoryTest {
-    private static final String ADD_SHOPPINGCART_PATH =
-            "/database/shoppingcarts/add-shopping-cart-with-user-to-tables.sql";
-    private static final String REMOVE_SHOPPINGCART_PATH =
-            "/database/shoppingcarts/remove-shopping-cart-with-user-from-tables.sql";
-
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
 

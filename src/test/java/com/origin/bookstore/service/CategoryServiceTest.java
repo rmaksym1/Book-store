@@ -20,16 +20,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
+import static com.origin.bookstore.util.TestConstants.pageable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
-    private static final Pageable pageable = PageRequest.of(0, 10);
     public static final Long VALID_CATEGORY_ID = 1L;
 
     @Mock

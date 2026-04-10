@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import static com.origin.bookstore.util.TestConstants.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,28 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CategoryControllerTest {
-    private static final String API_PATH =
-            "/categories";
-    private static final String API_PATH_ID =
-            "/categories/{id}";
-    private static final String CATEGORY_ID_BOOKS_API_PATH_ID =
-            "/categories/{id}/books";
-    private static final String ADD_CATEGORY_PATH =
-            "/database/categories/add-category-to-categories-table.sql";
-    private static final String REMOVE_CATEGORY_PATH =
-            "/database/categories/remove-category-from-categories-table.sql";
-    private static final String ADD_BOOK_PATH =
-            "/database/books/add-books-with-categories.sql";
-    private static final String REMOVE_BOOK_PATH =
-            "/database/books/remove-books-with-categories.sql";
-    private static final String ID_JSON_PATH =
-            "$.id";
-    private static final String NAME_JSON_PATH =
-            "$.name";
-    private static final String CONTENT_JSON_PATH =
-            "$.content";
-    private static final String ADMIN_ROLE = "ADMIN";
-    private static final String USER_ROLE = "USER";
     private static final Integer CATEGORY_ID = 2;
     private static final Integer INVALID_CATEGORY_ID = 456;
     private static final String CATEGORY_NAME = "Fiction";
@@ -62,7 +41,7 @@ public class CategoryControllerTest {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(post(API_PATH)
+        mockMvc.perform(post(API_CATEGORY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
@@ -77,7 +56,7 @@ public class CategoryControllerTest {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(post(API_PATH)
+        mockMvc.perform(post(API_CATEGORY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isForbidden()
@@ -92,7 +71,7 @@ public class CategoryControllerTest {
                 new CreateCategoryRequestDto(null, "some description");
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(post(API_PATH)
+        mockMvc.perform(post(API_CATEGORY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest()
@@ -107,10 +86,10 @@ public class CategoryControllerTest {
     @Sql(scripts = REMOVE_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllCategories_Request_ReturnsCategoryDtos() throws Exception {
-        mockMvc.perform(get(API_PATH))
+        mockMvc.perform(get(API_CATEGORY_PATH))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(CONTENT_JSON_PATH).isArray())
-                .andExpect(jsonPath(CONTENT_JSON_PATH + ".length()").value(1)
+                .andExpect(jsonPath($_CONTENT).isArray())
+                .andExpect(jsonPath($_CONTENT + ".length()").value(1)
                 );
     }
 
@@ -122,12 +101,12 @@ public class CategoryControllerTest {
     @Sql(scripts = REMOVE_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findCategoryById_Request_ReturnsCategoryDto() throws Exception {
-        mockMvc.perform(get(API_PATH_ID, CATEGORY_ID)
+        mockMvc.perform(get(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
 
-                .andExpect(jsonPath(ID_JSON_PATH, is(CATEGORY_ID)))
+                .andExpect(jsonPath($_ID, is(CATEGORY_ID)))
                 .andExpect(jsonPath(NAME_JSON_PATH, is(CATEGORY_NAME))
                 );
     }
@@ -140,7 +119,7 @@ public class CategoryControllerTest {
     @Sql(scripts = REMOVE_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findCategoryByInvalidId_Request_ReturnsNotFound() throws Exception {
-        mockMvc.perform(get(API_PATH_ID, INVALID_CATEGORY_ID)
+        mockMvc.perform(get(API_CATEGORY_PATH_ID, INVALID_CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNotFound()
@@ -155,7 +134,7 @@ public class CategoryControllerTest {
     @Sql(scripts = REMOVE_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteCategory_Request_ReturnsNoContent() throws Exception {
-        mockMvc.perform(delete(API_PATH_ID, CATEGORY_ID)
+        mockMvc.perform(delete(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNoContent());
@@ -169,7 +148,7 @@ public class CategoryControllerTest {
     @Sql(scripts = REMOVE_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void deleteCategoryByUser_Request_ReturnsForbidden() throws Exception {
-        mockMvc.perform(delete(API_PATH_ID, CATEGORY_ID)
+        mockMvc.perform(delete(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isForbidden());
@@ -186,11 +165,11 @@ public class CategoryControllerTest {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(put(API_PATH_ID, CATEGORY_ID)
+        mockMvc.perform(put(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(ID_JSON_PATH, is(CATEGORY_ID)))
+                .andExpect(jsonPath($_ID, is(CATEGORY_ID)))
                 .andExpect(jsonPath(NAME_JSON_PATH, is(requestDto.name()))
                 );
     }
@@ -206,7 +185,7 @@ public class CategoryControllerTest {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(put(API_PATH_ID, INVALID_CATEGORY_ID)
+        mockMvc.perform(put(API_CATEGORY_PATH_ID, INVALID_CATEGORY_ID)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound()
@@ -224,7 +203,7 @@ public class CategoryControllerTest {
         CreateCategoryRequestDto requestDto = TestUtil.createCategoryRequestDto();
         String json = objectMapper.writeValueAsString(requestDto);
 
-        mockMvc.perform(put(API_PATH_ID, CATEGORY_ID)
+        mockMvc.perform(put(API_CATEGORY_PATH_ID, CATEGORY_ID)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden()
