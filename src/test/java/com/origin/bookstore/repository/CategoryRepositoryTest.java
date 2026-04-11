@@ -10,21 +10,20 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
+import static com.origin.bookstore.util.TestConstants.ADD_CATEGORY_PATH;
+import static com.origin.bookstore.util.TestConstants.CLEANUP_DB_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CategoryRepositoryTest {
-    private static final String ADD_CATEGORY_PATH =
-            "/database/categories/add-category-to-categories-table.sql";
-    private static final String REMOVE_CATEGORY_PATH =
-            "/database/categories/remove-category-from-categories-table.sql";
-
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("Save then find a category by id")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveAndFind_ValidCategory_ReturnsCategory() {
         Category category = TestUtil.createCategory();
 
@@ -32,14 +31,14 @@ public class CategoryRepositoryTest {
         Category category1 = categoryRepository.findById(savedCategory.getId())
                 .orElseThrow(() -> new AssertionError("Category not found!"));
 
-        assertEquals("Chemistry", category1.getName());
+        assertEquals(category.getName(), category1.getName());
     }
 
     @Test
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_CATEGORY_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_CATEGORY_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Soft deleting category by id")
     void delete_ShouldMarkAsDeleted() {
         Long id = 1L;
@@ -50,6 +49,8 @@ public class CategoryRepositoryTest {
 
     @Test
     @DisplayName("Should throw exception when saving categories with same name")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveCategoriesBySameName_ThrowsException() {
         Category category = TestUtil.createCategory();
 

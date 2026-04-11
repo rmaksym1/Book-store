@@ -4,11 +4,13 @@ import com.origin.bookstore.dto.orderitem.OrderItemResponseDto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class OrderResponseDto {
     private Long id;
     private Long userId;

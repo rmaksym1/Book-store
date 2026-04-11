@@ -19,6 +19,7 @@ import com.origin.bookstore.service.ShoppingCartService;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Order.Status.PENDING);
         order.setUser(user);
         order.setTotal(BigDecimal.ZERO);
+        order.setOrderItems(new HashSet<>());
         order.getOrderItems()
                 .addAll(shoppingCart
                         .getCartItems().stream()
@@ -77,6 +79,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderItemResponseDto> getAllOrderItems(User user, Long orderId) {
+        orderRepository.findByIdAndUser(orderId, user)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Can't find order by id: " + orderId + " for user: " + user.getId()
+                ));
+
         return orderItemRepository
                 .findAllByOrderIdAndOrderUser(orderId, user).stream()
                 .map(orderItemMapper::toDto)

@@ -20,19 +20,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import static com.origin.bookstore.util.TestConstants.pageable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
-    private static final Pageable pageable = PageRequest.of(0, 10);
     public static final Long VALID_BOOK_ID = 1L;
     public static final Long INVALID_ID = 456L;
 

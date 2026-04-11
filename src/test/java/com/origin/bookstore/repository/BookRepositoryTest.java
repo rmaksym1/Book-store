@@ -3,7 +3,6 @@ package com.origin.bookstore.repository;
 import com.origin.bookstore.model.Book;
 import com.origin.bookstore.model.Category;
 import com.origin.bookstore.repository.book.BookRepository;
-import com.origin.bookstore.repository.category.CategoryRepository;
 import com.origin.bookstore.util.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+
+import static com.origin.bookstore.util.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,15 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
-    private static final String ADD_BOOK_PATH =
-            "/database/books/add-books-with-categories.sql";
-    private static final String REMOVE_BOOK_PATH =
-            "/database/books/remove-books-with-categories.sql";
     @Autowired
     private BookRepository bookRepository;
 
     @Test
     @DisplayName("Should save book with category and then find it by id")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveThenFind_ReturnsValidBook() {
         Category category = TestUtil.createCategory();
 
@@ -46,10 +44,10 @@ class BookRepositoryTest {
     }
 
     @Test
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Soft deleting book by id")
     void delete_ShouldMarkAsDeleted() {
         bookRepository.deleteById(1L);
@@ -58,10 +56,10 @@ class BookRepositoryTest {
     }
 
     @Test
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = ADD_BOOK_PATH,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = REMOVE_BOOK_PATH,
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Should find book by category id")
     void findBookByCategoryId_ReturnsValidBook() {
         List<Book> books = bookRepository.findAllByCategoriesId(4L, Pageable.ofSize(1)).toList();
@@ -71,6 +69,8 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("Should throw exception when saving books with same isbn")
+    @Sql(scripts = CLEANUP_DB_PATH, executionPhase =
+            Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveBooksBySameIsbn_ThrowsException() {
         Category category = TestUtil.createCategory();
 
