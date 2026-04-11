@@ -28,9 +28,9 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Builder
 @Setter
-@Table(name = "shopping_carts")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id
     private Long id;

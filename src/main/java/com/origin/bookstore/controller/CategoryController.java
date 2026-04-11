@@ -29,50 +29,50 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a category", description = "Create a category")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(
             @RequestBody @Valid
             CreateCategoryRequestDto createCategoryRequestDto) {
         return categoryService.save(createCategoryRequestDto);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping
     @Operation(summary = "Get all categories", description = "Get all categories")
+    @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public Page<CategoryDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/{id}")
     @Operation(summary = "Get category by id", description = "Get category by id")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public CategoryDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
     @Operation(summary = "Update category by id", description = "Update category by id")
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryDto updateCategory(@PathVariable Long id,
                                       @RequestBody @Valid
                                       CreateCategoryRequestDto createCategoryRequestDto) {
         return categoryService.update(id, createCategoryRequestDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
     @Operation(summary = "Delete category by id", description = "Delete category by id")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/{id}/books")
     @Operation(summary = "Get books by category id", description = "Get books by category id")
+    @GetMapping("/{id}/books")
+    @PreAuthorize("hasRole('USER')")
     public Page<BookDto> getBooksByCategoryId(@PathVariable Long id, Pageable pageable) {
         return categoryService.getBooksByCategoryId(id, pageable);
     }

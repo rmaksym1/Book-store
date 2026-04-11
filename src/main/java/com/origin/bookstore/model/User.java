@@ -24,14 +24,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted=false")
 @Getter
 @Setter
 @Builder
-@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
-@SQLRestriction("is_deleted=false")
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

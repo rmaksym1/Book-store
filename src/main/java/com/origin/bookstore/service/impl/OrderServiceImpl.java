@@ -4,6 +4,7 @@ import com.origin.bookstore.dto.order.OrderRequestDto;
 import com.origin.bookstore.dto.order.OrderResponseDto;
 import com.origin.bookstore.dto.order.UpdateOrderStatusRequestDto;
 import com.origin.bookstore.dto.orderitem.OrderItemResponseDto;
+import com.origin.bookstore.exception.EmptyCartException;
 import com.origin.bookstore.exception.EntityNotFoundException;
 import com.origin.bookstore.mapper.OrderItemMapper;
 import com.origin.bookstore.mapper.OrderMapper;
@@ -45,6 +46,10 @@ public class OrderServiceImpl implements OrderService {
                         "Can't get shopping cart by user id: "
                         + user.getId())
         );
+
+        if (shoppingCart.getCartItems().isEmpty()) {
+            throw new EmptyCartException("Your cart is empty. Add some books first!");
+        }
 
         Order order = orderMapper.toEntity(orderRequestDto);
         order.setOrderDateTime(LocalDateTime.now());
