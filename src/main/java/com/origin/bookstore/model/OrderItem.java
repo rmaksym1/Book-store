@@ -24,9 +24,9 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Setter
 @Builder
-@Table(name = "order_items")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "order_items")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

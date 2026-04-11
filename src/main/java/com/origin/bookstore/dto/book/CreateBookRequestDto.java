@@ -11,25 +11,28 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Setter
 @Builder
 public class CreateBookRequestDto {
-    @NotBlank
-    @Size(min = 1, max = 100)
+    @NotBlank(message = "Title cannot be blank")
+    @Size(min = 1, max = 100, message = "Title must be between 1 and 100 characters")
     private String title;
-    @NotBlank
-    @Size(min = 1, max = 100)
+    @NotBlank(message = "Author cannot be blank")
+    @Size(min = 1, max = 10, message = "Author must be between 1 and 100 characters")
     private String author;
-    @NotBlank
-    @Pattern(regexp = "\\d{3}-\\d{10}")
+    @NotBlank(message = "ISBN cannot be blank")
+    @Pattern(regexp = "\\d{3}-\\d{10}", message = "Invalid ISBN format")
     private String isbn;
-    @NotNull
-    @DecimalMin(value = "0", inclusive = true)
+    @NotNull(message = "Price cannot be null")
+    @DecimalMin(value = "0", inclusive = true, message = "Price must be positive")
     private BigDecimal price;
+    @Size(max = 1000, message = "Description is too long")
     private String description;
+    @URL(message = "Invalid cover image URL format")
     private String coverImage;
-    @NotEmpty
+    @NotEmpty(message = "At least one category ID must be provided")
     private Set<Long> categoryIds;
 }

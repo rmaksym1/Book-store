@@ -29,46 +29,47 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping
     @Operation(summary = "Get all books", description = "Get a list of all available books")
+    @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public Page<BookDto> getAll(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/{id}")
     @Operation(summary = "Get book by id", description = "Get a book by id")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
     @Operation(summary = "Create book", description = "Create a new book")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
+    @Operation(summary = "Delete book by id", description = "Delete a book by id")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete book by id", description = "Delete a book by id")
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
     @Operation(summary = "Update book by id", description = "Update a book by id")
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public BookDto updateBook(@PathVariable Long id,
                               @RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.updateBook(id, bookDto);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/search")
     @Operation(summary = "Search books by parameters", description = "Search books by parameters")
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('USER')")
     public Page<BookDto> searchBooks(BookSearchParameters searchParameters, Pageable pageable) {
         return bookService.search(searchParameters, pageable);
     }

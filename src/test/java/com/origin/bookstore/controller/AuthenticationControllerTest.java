@@ -40,7 +40,7 @@ class AuthenticationControllerTest {
         mockMvc.perform(post(REGISTRATION_PATH)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath(EMAIL_JSON_PATH).value(request.getEmail())
                 );
     }
@@ -53,7 +53,7 @@ class AuthenticationControllerTest {
             Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     void login_ValidRequest_ReturnsToken() throws Exception {
-        UserLoginRequestDto request = new UserLoginRequestDto("rudycooper@gmail.com", "example");
+        UserLoginRequestDto request = new UserLoginRequestDto("rudycooper@gmail.com", "testpassword");
 
         mockMvc.perform(post(LOGIN_PATH)
                         .content(objectMapper.writeValueAsString(request))

@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
+    @Operation(summary = "Add book to cart", description = "Add book to shopping cart")
     @PostMapping
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Add book to cart", description = "Add book to shopping cart")
     public ShoppingCartResponseDto addBookToCart(
             @RequestBody @Valid CartItemRequestDto cartItemRequestDto,
             @AuthenticationPrincipal User user) {
@@ -40,19 +40,19 @@ public class ShoppingCartController {
                 cartItemRequestDto);
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get items from shopping cart",
             description = "Get item list from shopping cart")
+    @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public ShoppingCartResponseDto getCartItems(
             @AuthenticationPrincipal User user) {
         return shoppingCartService.getShoppingCartByUserId(user);
     }
 
-    @PutMapping("/items/{cartItemId}")
-    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Update the books quantity in shopping cart",
             description = "Update the books quantity in shopping cart")
+    @PutMapping("/items/{cartItemId}")
+    @PreAuthorize("hasRole('USER')")
     public ShoppingCartResponseDto updateBookQuantityInCart(
             @PathVariable Long cartItemId,
             @RequestBody @Valid UpdateCartItemRequestDto updateCartItemRequestDto,
@@ -61,11 +61,11 @@ public class ShoppingCartController {
                 cartItemId, updateCartItemRequestDto);
     }
 
+    @Operation(summary = "Delete a book from shopping cart",
+            description = "Delete a book from shopping cart")
     @DeleteMapping("/items/{cartItemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Delete a book from shopping cart",
-            description = "Delete a book from shopping cart")
     public void deleteBookFromCart(@PathVariable Long cartItemId,
                                    @AuthenticationPrincipal User user) {
         shoppingCartService.deleteBookFromCart(user, cartItemId);

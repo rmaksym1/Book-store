@@ -54,7 +54,7 @@ public class BookControllerTest {
         mockMvc.perform(post(API_BOOKS_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath(TITLE_JSON_PATH).value(requestDto.getTitle()))
                 .andExpect(jsonPath(AUTHOR_JSON_PATH).value(requestDto.getAuthor()));
     }

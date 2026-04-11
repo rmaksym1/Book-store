@@ -44,7 +44,7 @@ public class OrderControllerTest {
         mockMvc.perform(post(ORDERS_URL)
                         .content(objectMapper.writeValueAsString(requestDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath($_ID).value(1L))
                 .andExpect(jsonPath($_STATUS).value("PENDING"))
                 .andExpect(jsonPath($_TOTAL).value(260));
