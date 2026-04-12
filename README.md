@@ -13,14 +13,20 @@ It handles the complete lifecycle of online sales: from secure stateless authent
 
 This project showcases a production-ready backend built with stateless JWT authentication, role-based access control, and a well-structured layered architecture. It relies on Spring Data JPA for data access and Liquibase for database versioning.
 
+---
+
 ## 📍 Table of Contents
 - [🛠️ Tech Stack](#️-tech-stack)
 - [🔥 Features](#-features)
 - [🧱 Architecture](#-architecture)
 - [🧩 Domain Model](#-domain-model)
+- [🔐 Security](#-security)
 - [📡 API Endpoints](#-api-endpoints)
+- [🔄 Example Workflow](#-example-workflow)
 - [📖 API Documentation](#-api-documentation)
 - [🚀 How to Run](#-how-to-run-the-project)
+
+---
 
 ## 🛠️ Tech Stack
 
@@ -40,7 +46,7 @@ This project showcases a production-ready backend built with stateless JWT authe
 | Testing            | JUnit 5, Mockito              |
 | Containerization   | Docker                        |
 
----
+### [⬆ Back to Table of Contents](#-table-of-contents)
 
 ## 🔥 Features
 
@@ -53,7 +59,7 @@ This project showcases a production-ready backend built with stateless JWT authe
 - 📄 Swagger API documentation
 - 🐳 Docker support
 
----
+### [⬆ Back to Table of Contents](#-table-of-contents)
 
 ## 🧱 Architecture
 
@@ -67,6 +73,8 @@ The project follows a layered architecture:
 - DTO layer instead of exposing entities to client
 - MapStruct for mapping
 - Low coupling between layers
+
+### [⬆ Back to Table of Contents](#-table-of-contents)
 
 ---
 
@@ -89,6 +97,12 @@ The project follows a layered architecture:
 - Order & OrderItem: ```One-to-Many``` (Each order tracks specific books and quantities)
 - Book & Category: ```Many-to-Many``` (A book can belong to multiple genres, e.g., "Fantasy" and "Bestseller")
 
+## Database Relationship Diagram
+
+![schema](bookflowdbdiagram.png)
+
+### [⬆ Back to Table of Contents](#-table-of-contents)
+
 ---
 
 ## 🔐 Security
@@ -98,6 +112,8 @@ The project follows a layered architecture:
 - Password hashing with BCrypt
 - Custom UserDetailsService
 - Method-level security with `@PreAuthorize`
+
+### [⬆ Back to Table of Contents](#-table-of-contents)
 
 ---
 
@@ -128,6 +144,8 @@ The project follows a layered architecture:
 | `/orders/{id}/items`       | GET         | Get all items in an order                     | User           |
 | `/orders/{id}`             | PATCH       | Update order status (ADMIN)                   | **ADMIN**      |
 
+### [⬆ Back to Table of Contents](#-table-of-contents)
+
 ---
 
 ## 🔄 Example Workflow
@@ -138,6 +156,8 @@ The project follows a layered architecture:
 4. Add a book to the cart
 5. Place an order
 6. View order history
+
+### [⬆ Back to Table of Contents](#-table-of-contents)
 
 ---
 
@@ -153,6 +173,7 @@ http://localhost:8088/swagger-ui/index.html
 
 http://localhost:8088/v3/api-docs
 
+### [⬆ Back to Table of Contents](#-table-of-contents)
 
 ---
 
@@ -225,3 +246,5 @@ If you prefer running locally:
 mvn clean install
 mvn spring-boot:run
 ```
+
+### [⬆ Back to Table of Contents](#-table-of-contents)
