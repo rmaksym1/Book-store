@@ -23,6 +23,7 @@ This project showcases a production-ready backend built with stateless JWT authe
 - [🔐 Security](#-security)
 - [📡 API Endpoints](#-api-endpoints)
 - [🔄 Example Workflow](#-example-workflow)
+- [🎬 Video Demo](#-example-workflow)
 - [📖 API Documentation](#-api-documentation)
 - [🚀 How to Run](#-how-to-run-the-project)
 
@@ -125,15 +126,15 @@ The project follows a layered architecture:
 | `/auth/registration`       | POST        | Create a new user account                     | None           |
 | `/auth/login`              | POST        | User login and receive JWT token              | None           |
 | 📚 **Book management**     |             |                                               |                |
-| `/books`                   | GET         | Get all books (with pagination)               | Public         |
-| `/books/{id}`              | GET         | Get a book by ID                              | Public         |
+| `/books`                   | GET         | Get all books (with pagination)               | User / Admin   |
+| `/books/{id}`              | GET         | Get a book by ID                              | User / Admin   |
 | `/books/{id}`              | PUT         | Update a book by ID                           | **ADMIN**      |
 | `/books/{id}`              | DELETE      | Delete a book by ID                           | **ADMIN**      |
-| `/books/search`            | GET         | Search for books based on parameters          | Public         |
+| `/books/search`            | GET         | Search for books based on parameters          | User / Admin   |
 | 📂 **Category management** |             |                                               |                |
-| `/categories`              | GET         | Get all categories (with pagination)          | Public         |
-| `/categories/{id}`         | GET         | Get a category by ID                          | Public         |
-| `/categories/{id}/books`   | GET         | Get books by category ID                      | Public         |
+| `/categories`              | GET         | Get all categories (with pagination)          | User / Admin   |
+| `/categories/{id}`         | GET         | Get a category by ID                          | User / Admin   |
+| `/categories/{id}/books`   | GET         | Get books by category ID                      | User / Admin   |
 | 🛒 **Cart management**     |             |                                               |                |
 | `/cart`                    | POST        | Add book to shopping cart                     | User           |
 | `/cart/items/{id}`         | PUT         | Update the quantity of books in shopping cart | User           |
@@ -156,6 +157,10 @@ The project follows a layered architecture:
 4. Add a book to the cart
 5. Place an order
 6. View order history
+
+### You can see the full API workflow below ↓
+
+- **[Watch the project demo (2 min)](https://www.youtube.com/watch?v=N67Zncj7lyY)**
 
 ### [⬆ Back to Table of Contents](#-table-of-contents)
 
