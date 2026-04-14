@@ -46,7 +46,7 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: email, value: "admin" }
-              - column: { name: password, value: "$2a$10$59vPwc8ok425plSgCJQLC.CGsL/tPtaZBj04v0b3i/EREfqHaEkH2" }
+              - column: { name: email, value: "admin@gmail.com" }
+              - column: { name: password, value: "$2a$08$q79JG7qjEjA2fLGs548BneXgCqF/Ff5syI.k16DJZBc.skxz27Vi2" }
               - column: { name: first_name, value: "admin" }
               - column: { name: last_name, value: "admin" }

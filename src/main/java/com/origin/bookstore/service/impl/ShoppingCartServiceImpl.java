@@ -6,9 +6,11 @@ import com.origin.bookstore.dto.shoppingcart.ShoppingCartResponseDto;
 import com.origin.bookstore.exception.EntityNotFoundException;
 import com.origin.bookstore.mapper.CartItemMapper;
 import com.origin.bookstore.mapper.ShoppingCartMapper;
+import com.origin.bookstore.model.Book;
 import com.origin.bookstore.model.CartItem;
 import com.origin.bookstore.model.ShoppingCart;
 import com.origin.bookstore.model.User;
+import com.origin.bookstore.repository.book.BookRepository;
 import com.origin.bookstore.repository.cartitem.CartItemRepository;
 import com.origin.bookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.origin.bookstore.service.ShoppingCartService;
@@ -24,8 +26,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemMapper cartItemMapper;
     private final CartItemRepository cartItemRepository;
+    private final BookRepository bookRepository;
 
     @Override
+    @Transactional
     public ShoppingCartResponseDto addBookToCart(User user, CartItemRequestDto cartItemRequestDto) {
         ShoppingCart shoppingCart = shoppingCartRepository
                 .findByUser(user).orElseThrow(
@@ -39,10 +43,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         .equals(cartItemRequestDto.bookId()))
                 .findFirst()
                 .orElseGet(() -> {
-                    CartItem cartItem1 = cartItemMapper.toEntity(cartItemRequestDto);
-                    cartItem1.setShoppingCart(shoppingCart);
-                    shoppingCart.getCartItems().add(cartItem1);
-                    return cartItem1;
+                    Book book = bookRepository.findById(cartItemRequestDto.bookId())
+                            .orElseThrow(() -> new EntityNotFoundException(
+                                    "Book with id: " + cartItemRequestDto.bookId() + " not found"));
+
+                    CartItem newItem = cartItemMapper.toEntity(cartItemRequestDto);
+                    newItem.setBook(book);
+                    newItem.setShoppingCart(shoppingCart);
+                    shoppingCart.getCartItems().add(newItem);
+                    return newItem;
                 });
 
         cartItem.setQuantity(cartItem.getQuantity() + cartItemRequestDto.quantity());

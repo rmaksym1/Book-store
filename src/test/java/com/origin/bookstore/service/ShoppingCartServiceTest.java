@@ -10,6 +10,7 @@ import com.origin.bookstore.model.Book;
 import com.origin.bookstore.model.CartItem;
 import com.origin.bookstore.model.ShoppingCart;
 import com.origin.bookstore.model.User;
+import com.origin.bookstore.repository.book.BookRepository;
 import com.origin.bookstore.repository.cartitem.CartItemRepository;
 import com.origin.bookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.origin.bookstore.service.impl.ShoppingCartServiceImpl;
@@ -38,6 +39,9 @@ public class ShoppingCartServiceTest {
     ShoppingCartMapper shoppingCartMapper;
 
     @Mock
+    BookRepository bookRepository;
+
+    @Mock
     CartItemRepository cartItemRepository;
 
     @InjectMocks
@@ -47,13 +51,16 @@ public class ShoppingCartServiceTest {
     @DisplayName("Should add a cartItem to cart successfully")
     void addCartItemToCart_ReturnsShoppingCartResponseDto() {
         ShoppingCartResponseDto shoppingCartResponseDto = TestUtil.createShoppingCartResponseDto();
+        Book book = TestUtil.createBook();
         CartItem cartItem = TestUtil.createCartItem();
+        cartItem.setQuantity(10);
         CartItemRequestDto cartItemRequestDto = TestUtil.createCartItemRequestDto();
         ShoppingCart shoppingCart = TestUtil.createShoppingCart();
         shoppingCart.setCartItems(new HashSet<>());
         User user = TestUtil.createUser();
 
         when(shoppingCartRepository.findByUser(user)).thenReturn(Optional.of(shoppingCart));
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
         when(cartItemMapper.toEntity(cartItemRequestDto)).thenReturn(cartItem);
         when(shoppingCartRepository.save(shoppingCart)).thenReturn(shoppingCart);
         when(shoppingCartMapper.toDto(shoppingCart)).thenReturn(shoppingCartResponseDto);
@@ -62,6 +69,7 @@ public class ShoppingCartServiceTest {
 
         assertEquals(shoppingCartResponseDto, shoppingCartResponseDto1);
         verify(shoppingCartRepository).findByUser(user);
+        verify(bookRepository).findById(1L);
         verify(cartItemMapper).toEntity(cartItemRequestDto);
         verify(shoppingCartRepository).save(shoppingCart);
         verify(shoppingCartMapper).toDto(shoppingCart);
